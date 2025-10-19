@@ -400,8 +400,164 @@
 .search-box:focus {
     animation: searchPulse 1.5s infinite;
 }
+.pizza-box {
+            background: #ffffff;
+            border: 3px solid #000000;
+            padding: 50px 40px;
+            border-radius: 12px;
+            box-shadow: 8px 8px 0 #000000;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+        }
+        
+        .pizza-box::after {
+            content: "";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: -10px;
+            bottom: -10px;
+            background: #ff3e80;
+            border-radius: 12px;
+            z-index: -1;
+        }
+        
+        .burger-title {
+            font-size: 2.8rem;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #000000;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+        
+        .sushi-platter {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .taco-button {
+            background-color: #ffffff;
+            border: 3px solid #000000;
+            padding: 22px 30px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            text-align: left;
+            color: #000000;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            box-shadow: 4px 4px 0 #000000;
+        }
+        
+        .taco-button:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0 #000000;
+        }
+        
+        .taco-button:active {
+            transform: translate(0, 0);
+            box-shadow: 2px 2px 0 #000000;
+        }
+        
+        .ramen-button {
+            background-color: #6c5ce7;
+            color: white;
+        }
+        
+        .sashimi-button {
+            background-color: #00cec9;
+        }
+        
+        .cheese-slice {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.6rem;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+        }
+        
+        .ramen-button .cheese-slice {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .lettuce-wrap {
+            flex: 1;
+        }
+        
+        .hot-sauce {
+            margin-left: auto;
+            font-size: 1.4rem;
+            opacity: 0.7;
+        }
+        
+        .sesame-seed {
+            display: inline-block;
+            background: #000000;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            vertical-align: middle;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 600px) {
+            .pizza-box {
+                padding: 30px 20px;
+            }
+            
+            .burger-title {
+                font-size: 2.2rem;
+            }
+            
+            .taco-button {
+                font-size: 1.1rem;
+                padding: 18px 20px;
+            }
+        }
 
+        .live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #ff3838;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-left: 8px;
+    animation: pulse 2s infinite;
+}
 
+.live-indicator::before {
+    content: "●";
+    font-size: 0.6rem;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.3; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
 
     </style>
 
@@ -427,6 +583,23 @@
                 </div>
                 <iframe class="stream-iframe" id="streamIframe" src="" allowfullscreen style="display: none;"></iframe>
             </div>
+
+            
+        <br>
+        <div class="sushi-platter">
+            <a href="https://spyderone.pages.dev/live-channels" class="taco-button ramen-button">
+                <div class="cheese-slice">
+                    <br>
+                    <!-- <i class="fas fa-play"><img src="" alt=""></i> -->
+                </div>
+                <div class="lettuce-wrap">
+    Sports Events
+    <span class="live-indicator"> LIVE </span>
+</div>
+            </a>
+            
+        </div>
+    
         </section>
         
         <section class="channels-section">
@@ -438,6 +611,8 @@
                 <!-- Channels will be populated by JavaScript -->
             </div>
         </section>
+
+        
         
         <footer>
             <p class="made-by">MADE WITH &#128154; BY SAMEER </p>
@@ -599,4 +774,4 @@
         populateChannelsList(channels);
     </script>
 </body>
-</html>
+</html>    
