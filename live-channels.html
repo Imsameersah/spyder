@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpyderOne.pages.dev - Live Sports Streaming</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+        <link rel="icon" type="image/x-icon" href="https://img.icons8.com/?size=100&id=ndDcM2br1l2M&format=png&color=000000">
+
+    <style>
+        :root {
+            --primary: #ff0055;
+            --secondary: #00a8ff;
+            --accent: #9c27b0;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #f5f5f5;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --brutal-shadow: 8px 8px 0px #000;
+            --live: #ff0033;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 50%, #1a1a2e 100%);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .made-by {
+            background: var(--glass);
+            padding: 8px 15px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            font-weight: 500;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .events-section {
+            background: var(--glass);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--brutal-shadow);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .events-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 8px;
+        }
+
+        .category-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            background: var(--dark);
+            border: 2px solid var(--secondary);
+            color: var(--light);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+
+        .date-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .date-btn {
+            background: var(--dark);
+            border: 2px solid var(--primary);
+            color: var(--light);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .date-btn:hover, .date-btn.active {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .live-indicator {
+            background: var(--live);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .event-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .event-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .event-card:hover {
+            transform: translateX(5px);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .event-card.active {
+            border-left: 4px solid var(--primary);
+            background: rgba(255, 0, 85, 0.1);
+        }
+
+        .event-card.live {
+            border-left: 4px solid var(--live);
+            background: rgba(255, 0, 51, 0.1);
+        }
+
+        .event-sport {
+            font-size: 0.8rem;
+            color: var(--secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .event-tournament {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+
+        .event-match {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .event-time {
+            font-size: 0.8rem;
+            color: #ccc;
+        }
+
+        .stream-section {
+            background: var(--glass);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--brutal-shadow);
+        }
+
+        .stream-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 8px;
+        }
+
+        .video-container {
+            width: 100%;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            aspect-ratio: 16/9;
+            position: relative;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, #111, #222);
+            color: #fff;
+        }
+
+        .video-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .video-player {
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        .event-details {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .event-details h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+
+        .channel-list {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .channel-btn {
+            background: var(--dark);
+            border: 2px solid var(--accent);
+            color: var(--light);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .channel-btn:hover, .channel-btn.active {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .stream-status {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .stream-status.loading {
+            background: rgba(255, 165, 0, 0.2);
+            border: 1px solid orange;
+        }
+
+        .stream-status.error {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid red;
+        }
+
+        .stream-status.success {
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid green;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .events-section {
+                max-height: 400px;
+            }
+        }
+
+        /* Brutalism elements */
+        .brutal-border {
+            border: 3px solid #000;
+        }
+
+        .brutal-btn {
+            background: var(--primary);
+            color: #000;
+            font-weight: 800;
+            border: 3px solid #000;
+            box-shadow: 5px 5px 0px #000;
+            transition: all 0.2s ease;
+        }
+
+        .brutal-btn:hover {
+            transform: translate(3px, 3px);
+            box-shadow: 2px 2px 0px #000;
+        }
+
+        .section-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--glass-border);
+        }
+
+        .section-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .section-tab.active {
+            border-bottom: 3px solid var(--primary);
+            color: var(--primary);
+        }
+        
+.logo:hover {
+    /* transform: scale(1.05); */
+    /* text-shadow: 0 0 50px rgba(79, 205, 196, 0.6); */
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.5s ease;
+    text-decoration: underline;
+}
+
+
+
+.search-box:focus {
+    animation: searchPulse 1.5s infinite;
+}
+.pizza-box {
+            background: #ffffff;
+            border: 3px solid #000000;
+            padding: 50px 40px;
+            border-radius: 12px;
+            box-shadow: 8px 8px 0 #000000;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+        }
+        
+        .pizza-box::after {
+            content: "";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: -10px;
+            bottom: -10px;
+            background: #ff3e80;
+            border-radius: 12px;
+            z-index: -1;
+        }
+        
+        .burger-title {
+            font-size: 2.8rem;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #000000;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+        
+        .sushi-platter {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .taco-button {
+            background-color: #ffffff;
+            border: 3px solid #000000;
+            padding: 22px 30px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            text-align: left;
+            color: #000000;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            box-shadow: 4px 4px 0 #000000;
+        }
+        
+        .taco-button:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0 #000000;
+        }
+        
+        .taco-button:active {
+            transform: translate(0, 0);
+            box-shadow: 2px 2px 0 #000000;
+        }
+        
+        .ramen-button {
+            background-color: #6c5ce7;
+            color: white;
+        }
+        
+        .sashimi-button {
+            background-color: #00cec9;
+        }
+        
+        .cheese-slice {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.6rem;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+        }
+        
+        .ramen-button .cheese-slice {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .lettuce-wrap {
+            flex: 1;
+        }
+        
+        .hot-sauce {
+            margin-left: auto;
+            font-size: 1.4rem;
+            opacity: 0.7;
+        }
+        
+        .sesame-seed {
+            display: inline-block;
+            background: #000000;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            vertical-align: middle;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 600px) {
+            .pizza-box {
+                padding: 30px 20px;
+            }
+            
+            .burger-title {
+                font-size: 2.2rem;
+            }
+            
+            .taco-button {
+                font-size: 1.1rem;
+                padding: 18px 20px;
+            }
+        }
+
+        .live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #ff3838;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-left: 8px;
+    animation: pulse 2s infinite;
+}
+
+.live-indicator::before {
+    content: "●";
+    font-size: 0.6rem;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.3; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">SpyderOne 🕷️</div>
+            <div class="made-by">Made With 💛 By Sameer </div>
+        </header>
+
+        <main class="main-content">
+            <section class="events-section">
+                <h2>Live & Upcoming Events</h2>
+                
+                <div class="section-tabs">
+                    <div class="section-tab active" data-tab="live">Live Now</div>
+                    <div class="section-tab" data-tab="upcoming">Upcoming</div>
+                </div>
+                
+                <div class="category-filters" id="categoryFilters">
+                    <button class="category-btn active" data-category="all">All Sports</button>
+                    <!-- Categories will be populated by JavaScript -->
+                </div>
+                
+                <div class="date-selector" id="dateSelector">
+                    <!-- Dates will be populated by JavaScript -->
+                </div>
+                
+                <div class="event-list" id="eventList">
+                    <!-- Events will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <section class="stream-section">
+                <h2>Live Stream</h2>
+                <div class="stream-status" id="streamStatus" style="display: none;"></div>
+                <div class="video-container">
+                    <div class="video-placeholder" id="videoPlaceholder">
+                        <i>▶</i>
+                        <p>Select an event to start streaming</p>
+<br>
+                                                <span class="live-indicator"> LIVE </span>
+
+                    </div>
+                    <iframe class="video-player" id="videoPlayer" frameborder="0" allowfullscreen></iframe>
+                </div>
+                
+                <div class="event-details" id="eventDetails">
+                    <h3>Event Information</h3>
+                    <p>Select an event to view details</p>
+                </div>
+                
+                <div class="channel-list" id="channelList">
+                    <!-- Channel buttons will be populated by JavaScript -->
+                </div>
+            </section>
+        </main>
+
+        
+            
+            <a href="https://spyder.pages.dev/" class="taco-button sashimi-button">
+                <div class="lettuce-wrap">
+                    LIVE SPORTS CHANNELS 
+                    <span class="live-indicator"> LIVE </span>
+                    <!-- <span class="sesame-seed">NEW</span> -->
+                </div>
+                <div class="hot-sauce">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+            </a>
+    </div>
+        <footer>
+            <p>SpyderOne &copy; 2025 | Powered by Sameer</p>
+            <p>All streams are provided by third-party sources</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const apiUrl = 'https://topembed.pw/api.php?format=json';
+            const dateSelector = document.getElementById('dateSelector');
+            const eventList = document.getElementById('eventList');
+            const eventDetails = document.getElementById('eventDetails');
+            const channelList = document.getElementById('channelList');
+            const videoPlayer = document.getElementById('videoPlayer');
+            const videoPlaceholder = document.getElementById('videoPlaceholder');
+            const categoryFilters = document.getElementById('categoryFilters');
+            const sectionTabs = document.querySelectorAll('.section-tab');
+            const streamStatus = document.getElementById('streamStatus');
+            
+            let eventsData = {};
+            let selectedDate = '';
+            let selectedEvent = null;
+            let activeTab = 'live';
+            let activeCategory = 'all';
+            let allCategories = new Set();
+
+            // Fetch data from API
+            async function fetchEvents() {
+                try {
+                    eventList.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading events...</p></div>';
+                    
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch data');
+                    }
+                    
+                    const data = await response.json();
+                    eventsData = data.events;
+                    
+                    extractCategories();
+                    populateCategories();
+                    populateDateSelector();
+                    displayEvents();
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    eventList.innerHTML = '<div class="error-message">Failed to load events. Please try again later.</div>';
+                }
+            }
+
+            // Extract all unique categories
+            function extractCategories() {
+                allCategories.clear();
+                allCategories.add('all');
+                
+                Object.values(eventsData).forEach(dateEvents => {
+                    dateEvents.forEach(event => {
+                        allCategories.add(event.sport);
+                    });
+                });
+            }
+
+            // Populate category filters
+            function populateCategories() {
+                categoryFilters.innerHTML = '';
+                
+                allCategories.forEach(category => {
+                    if (category === 'all') {
+                        const categoryBtn = document.createElement('button');
+                        categoryBtn.className = 'category-btn active';
+                        categoryBtn.textContent = 'All Sports';
+                        categoryBtn.setAttribute('data-category', 'all');
+                        categoryBtn.addEventListener('click', handleCategoryChange);
+                        categoryFilters.appendChild(categoryBtn);
+                    } else {
+                        const categoryBtn = document.createElement('button');
+                        categoryBtn.className = 'category-btn';
+                        categoryBtn.textContent = category;
+                        categoryBtn.setAttribute('data-category', category);
+                        categoryBtn.addEventListener('click', handleCategoryChange);
+                        categoryFilters.appendChild(categoryBtn);
+                    }
+                });
+            }
+
+            // Handle category change
+            function handleCategoryChange(e) {
+                document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                activeCategory = e.target.getAttribute('data-category');
+                displayEvents();
+            }
+
+            // Handle tab change
+            sectionTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    sectionTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    activeTab = this.getAttribute('data-tab');
+                    displayEvents();
+                });
+            });
+
+            // Populate date selector with available dates
+            function populateDateSelector() {
+                const dates = Object.keys(eventsData).sort();
+                dateSelector.innerHTML = '';
+                
+                dates.forEach(date => {
+                    const dateBtn = document.createElement('button');
+                    dateBtn.className = 'date-btn';
+                    dateBtn.textContent = formatDate(date);
+                    dateBtn.addEventListener('click', () => {
+                        document.querySelectorAll('.date-btn').forEach(btn => btn.classList.remove('active'));
+                        dateBtn.classList.add('active');
+                        selectedDate = date;
+                        displayEvents();
+                    });
+                    
+                    if (date === selectedDate || (!selectedDate && date === dates[0])) {
+                        dateBtn.classList.add('active');
+                        selectedDate = date;
+                    }
+                    
+                    dateSelector.appendChild(dateBtn);
+                });
+            }
+
+            // Display events based on active tab and category
+            function displayEvents() {
+                eventList.innerHTML = '';
+                
+                if (activeTab === 'live') {
+                    displayLiveEvents();
+                } else {
+                    displayUpcomingEvents();
+                }
+            }
+
+            // Display live events
+            function displayLiveEvents() {
+                const now = Math.floor(Date.now() / 1000);
+                const twoHours = 2 * 60 * 60; // 2 hours in seconds
+                
+                let liveEvents = [];
+                
+                // Find events that are happening now (within 2 hours of current time)
+                Object.values(eventsData).forEach(dateEvents => {
+                    dateEvents.forEach(event => {
+                        if (Math.abs(event.unix_timestamp - now) < twoHours) {
+                            if (activeCategory === 'all' || event.sport === activeCategory) {
+                                liveEvents.push(event);
+                            }
+                        }
+                    });
+                });
+                
+                if (liveEvents.length === 0) {
+                    eventList.innerHTML = '<p>No live events at the moment.</p>';
+                    return;
+                }
+                
+                liveEvents.forEach(event => {
+                    const eventCard = document.createElement('div');
+                    eventCard.className = 'event-card live';
+                    eventCard.innerHTML = `
+                        <div class="event-sport">${event.sport} <span class="live-indicator">Live</span></div>
+                        <div class="event-tournament">${event.tournament}</div>
+                        <div class="event-match">${event.match}</div>
+                        <div class="event-time">${formatTime(event.unix_timestamp)}</div>
+                    `;
+                    
+                    eventCard.addEventListener('click', () => {
+                        document.querySelectorAll('.event-card').forEach(card => card.classList.remove('active'));
+                        eventCard.classList.add('active');
+                        selectEvent(event);
+                    });
+                    
+                    eventList.appendChild(eventCard);
+                });
+            }
+
+            // Display upcoming events
+            function displayUpcomingEvents() {
+                if (!eventsData[selectedDate] || eventsData[selectedDate].length === 0) {
+                    eventList.innerHTML = '<p>No events scheduled for this date.</p>';
+                    return;
+                }
+                
+                const filteredEvents = eventsData[selectedDate].filter(event => {
+                    return activeCategory === 'all' || event.sport === activeCategory;
+                });
+                
+                if (filteredEvents.length === 0) {
+                    eventList.innerHTML = '<p>No events found for this category.</p>';
+                    return;
+                }
+                
+                filteredEvents.forEach(event => {
+                    const eventCard = document.createElement('div');
+                    eventCard.className = 'event-card';
+                    eventCard.innerHTML = `
+                        <div class="event-sport">${event.sport}</div>
+                        <div class="event-tournament">${event.tournament}</div>
+                        <div class="event-match">${event.match}</div>
+                        <div class="event-time">${formatTime(event.unix_timestamp)}</div>
+                    `;
+                    
+                    eventCard.addEventListener('click', () => {
+                        document.querySelectorAll('.event-card').forEach(card => card.classList.remove('active'));
+                        eventCard.classList.add('active');
+                        selectEvent(event);
+                    });
+                    
+                    eventList.appendChild(eventCard);
+                });
+            }
+
+            // Select an event and display its details
+            function selectEvent(event) {
+                selectedEvent = event;
+                
+                // Update event details
+                eventDetails.innerHTML = `
+                    <h3>${event.match}</h3>
+                    <p><strong>Sport:</strong> ${event.sport}</p>
+                    <p><strong>Tournament:</strong> ${event.tournament}</p>
+                    <p><strong>Time:</strong> ${formatTime(event.unix_timestamp)}</p>
+                `;
+                
+                // Update channel list
+                channelList.innerHTML = '';
+                if (event.channels && event.channels.length > 0) {
+                    event.channels.forEach((channel, index) => {
+                        const channelBtn = document.createElement('button');
+                        channelBtn.className = 'channel-btn brutal-btn';
+                        channelBtn.textContent = `Channel ${index + 1}`;
+                        channelBtn.addEventListener('click', () => {
+                            document.querySelectorAll('.channel-btn').forEach(btn => btn.classList.remove('active'));
+                            channelBtn.classList.add('active');
+                            loadStream(channel);
+                        });
+                        channelList.appendChild(channelBtn);
+                    });
+                    
+                    // Auto-select first channel
+                    if (channelList.firstChild) {
+                        channelList.firstChild.click();
+                    }
+                } else {
+                    channelList.innerHTML = '<p>No channels available for this event.</p>';
+                }
+            }
+
+            // Load stream in the video player
+            async function loadStream(channelUrl) {
+                showStreamStatus('Loading stream...', 'loading');
+                videoPlaceholder.style.display = 'none';
+                videoPlayer.style.display = 'block';
+                
+                try {
+                    // Try to load the channel URL directly first
+                    videoPlayer.src = channelUrl;
+                    
+                    // Set up a timeout to check if the stream loads
+                    setTimeout(() => {
+                        // If the iframe is still loading, try alternative methods
+                        if (videoPlayer.src && !videoPlayer.contentDocument) {
+                            showStreamStatus('Stream might not be available. Trying alternative...', 'error');
+                            // Try to use the channel URL as an embed URL
+                            const embedUrl = channelUrl.replace('/channel/', '/embed/');
+                            videoPlayer.src = embedUrl;
+                        }
+                    }, 3000);
+                    
+                    // Listen for iframe load events
+                    videoPlayer.onload = function() {
+                        showStreamStatus('Stream loaded successfully!', 'success');
+                        setTimeout(() => {
+                            hideStreamStatus();
+                        }, 3000);
+                    };
+                    
+                    videoPlayer.onerror = function() {
+                        showStreamStatus('Failed to load stream. The stream might be offline.', 'error');
+                    };
+                    
+                } catch (error) {
+                    console.error('Error loading stream:', error);
+                    showStreamStatus('Error loading stream. Please try another channel.', 'error');
+                }
+            }
+
+            // Show stream status message
+            function showStreamStatus(message, type) {
+                streamStatus.textContent = message;
+                streamStatus.className = `stream-status ${type}`;
+                streamStatus.style.display = 'block';
+            }
+
+            // Hide stream status message
+            function hideStreamStatus() {
+                streamStatus.style.display = 'none';
+            }
+
+            // Utility functions for formatting
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+            }
+
+            function formatTime(unixTimestamp) {
+                const date = new Date(unixTimestamp * 1000);
+                return date.toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+            }
+
+            // Initialize the application
+            fetchEvents();
+        });
+    </script>
+</body>
+</html>
