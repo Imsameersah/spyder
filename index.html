@@ -1,1 +1,421 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STREAMFORCE - Raw Sports Streaming</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --gray: #333333;
+            --light-gray: #f0f0f0;
+            --accent: #ff0000;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: var(--white);
+            color: var(--black);
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.4;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            min-height: 100vh;
+            gap: 0;
+        }
+        
+        /* Header */
+        header {
+            grid-column: 1 / -1;
+            background: var(--black);
+            color: var(--white);
+            padding: 20px;
+            border-bottom: 5px solid var(--accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-weight: 700;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+        
+        .search-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-box {
+            padding: 10px 15px;
+            background: var(--white);
+            border: 2px solid var(--black);
+            color: var(--black);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            width: 250px;
+        }
+        
+        .search-btn {
+            padding: 10px 20px;
+            background: var(--accent);
+            border: 2px solid var(--black);
+            color: var(--white);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Player Section */
+        .player-section {
+            background: var(--black);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-right: 5px solid var(--accent);
+        }
+        
+        .player-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--white);
+            text-transform: uppercase;
+        }
+        
+        .player-container {
+            flex: 1;
+            background: var(--black);
+            border: 5px solid var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+        }
+        
+        .player-placeholder {
+            text-align: center;
+            padding: 40px;
+            color: var(--light-gray);
+        }
+        
+        .player-placeholder h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+        
+        .player-placeholder p {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .stream-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Channels Section */
+        .channels-section {
+            background: var(--light-gray);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-left: 5px solid var(--black);
+        }
+        
+        .channels-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .channels-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--black);
+            text-transform: uppercase;
+        }
+        
+        .channels-count {
+            background: var(--black);
+            color: var(--white);
+            padding: 5px 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        .channels-list {
+            overflow-y: auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .channel-item {
+            background: var(--white);
+            border: 2px solid var(--black);
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .channel-item:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+        
+        .channel-item.active {
+            background: var(--accent);
+            color: var(--white);
+            border-color: var(--black);
+        }
+        
+        .channel-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+        
+        .channel-country {
+            font-size: 0.8rem;
+            color: var(--gray);
+            text-transform: uppercase;
+        }
+        
+        .channel-item:hover .channel-country {
+            color: var(--light-gray);
+        }
+        
+        /* Footer */
+        footer {
+            grid-column: 1 / -1;
+            background: var(--black);
+            color: var(--white);
+            padding: 20px;
+            text-align: center;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .made-by {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--white);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--black);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .channels-section {
+                order: -1;
+                border-left: none;
+                border-bottom: 5px solid var(--black);
+            }
+            
+            .player-section {
+                border-right: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .search-container {
+                width: 100%;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="logo">STREAMFORCE</h1>
+            <div class="search-container">
+                <input type="text" class="search-box" placeholder="Search channels...">
+                <button class="search-btn">SEARCH</button>
+            </div>
+        </header>
+        
+        <section class="player-section">
+            <h2 class="player-title">LIVE STREAM</h2>
+            <div class="player-container">
+                <div class="player-placeholder">
+                    <h3>SELECT A CHANNEL</h3>
+                    <p>Choose a channel from the list to start streaming</p>
+                    <p>All streams are provided by topembed.pw</p>
+                </div>
+                <iframe class="stream-iframe" id="streamIframe" src="" allowfullscreen style="display: none;"></iframe>
+            </div>
+        </section>
+        
+        <section class="channels-section">
+            <div class="channels-header">
+                <h2 class="channels-title">CHANNELS</h2>
+                <div class="channels-count" id="channelsCount">156 CHANNELS</div>
+            </div>
+            <div class="channels-list" id="channelsList">
+                <!-- Channels will be populated by JavaScript -->
+            </div>
+        </section>
+        
+        <footer>
+            <p class="made-by">MADE BY SAMEER WITH &lt;3</p>
+        </footer>
+    </div>
+
+    <script>
+        // Channel data
+        const channels = [
+            { name: "SkySportsNews[UK]", country: "UK", url: "https://topembed.pw/channel/SkySportsNews[UK]" },
+            { name: "SkySportsMainEvent[UK]", country: "UK", url: "https://topembed.pw/channel/SkySportsMainEvent[UK]" },
+            { name: "SkySportsAction[UK]", country: "UK", url: "https://topembed.pw/channel/SkySportsAction[UK]" },
+            { name: "SkySportsArena[UK]", country: "UK", url: "https://topembed.pw/channel/SkySportsArena[UK]" },
+            { name: "SkySportsF1[UK]", country: "UK", url: "https://topembed.pw/channel/SkySportsF1[UK]" },
+            { name: "SkySportsPremierLeague[UK]", country: "UK", url: "https://topembed.pw/channel/SkySportsPremierLeague[UK]" },
+            { name: "SkySportsFootball[UK]", country: "UK", url: "https://topembed.pw/channel/SkySportsFootball[UK]" },
+            { name: "TNTSports1[UK]", country: "UK", url: "https://topembed.pw/channel/TNTSports1[UK]" },
+            { name: "TNTSports2[UK]", country: "UK", url: "https://topembed.pw/channel/TNTSports2[UK]" },
+            { name: "BTN[USA]", country: "USA", url: "https://topembed.pw/channel/BTN[USA]" },
+            { name: "ESPN[USA]", country: "USA", url: "https://topembed.pw/channel/ESPN[USA]" },
+            { name: "ESPN2[USA]", country: "USA", url: "https://topembed.pw/channel/ESPN2[USA]" },
+            { name: "FOXSports1[USA]", country: "USA", url: "https://topembed.pw/channel/FOXSports1[USA]" },
+            { name: "FOXSports2[USA]", country: "USA", url: "https://topembed.pw/channel/FOXSports2[USA]" },
+            { name: "NBATV[USA]", country: "USA", url: "https://topembed.pw/channel/NBATV[USA]" },
+            { name: "NFLNetwork[USA]", country: "USA", url: "https://topembed.pw/channel/NFLNetwork[USA]" },
+            { name: "NHLNetwork[USA]", country: "USA", url: "https://topembed.pw/channel/NHLNetwork[USA]" },
+            { name: "TNT[USA]", country: "USA", url: "https://topembed.pw/channel/TNT[USA]" },
+            { name: "TennisChannel[USA]", country: "USA", url: "https://topembed.pw/channel/TennisChannel[USA]" },
+            { name: "DAZN1Deutschland[Germany]", country: "Germany", url: "https://topembed.pw/channel/DAZN1Deutschland[Germany]" },
+            { name: "DAZN2Deutschland[Germany]", country: "Germany", url: "https://topembed.pw/channel/DAZN2Deutschland[Germany]" },
+            { name: "SkySport1[Germany]", country: "Germany", url: "https://topembed.pw/channel/SkySport1[Germany]" },
+            { name: "Eurosport1[Germany]", country: "Germany", url: "https://topembed.pw/channel/Eurosport1[Germany]" },
+            { name: "ElevenSports1[Portugal]", country: "Portugal", url: "https://topembed.pw/channel/ElevenSports1[Portugal]" },
+            { name: "SportTV1[Portugal]", country: "Portugal", url: "https://topembed.pw/channel/SportTV1[Portugal]" },
+            { name: "SuperSportFootball[SouthAfrica]", country: "South Africa", url: "https://topembed.pw/channel/SuperSportFootball[SouthAfrica]" },
+            { name: "SuperSportCricket[SouthAfrica]", country: "South Africa", url: "https://topembed.pw/channel/SuperSportCricket[SouthAfrica]" },
+            { name: "SuperSportRugby[SouthAfrica]", country: "South Africa", url: "https://topembed.pw/channel/SuperSportRugby[SouthAfrica]" },
+            { name: "MovistarDeportes[Spain]", country: "Spain", url: "https://topembed.pw/channel/MovistarDeportes[Spain]" },
+            { name: "DAZN1[Spain]", country: "Spain", url: "https://topembed.pw/channel/DAZN1[Spain]" },
+            { name: "BeINSport1[France]", country: "France", url: "https://topembed.pw/channel/BeINSport1[France]" },
+            { name: "RMC Sport1[France]", country: "France", url: "https://topembed.pw/channel/RMCSport1[France]" },
+            { name: "SkySport1[NewZealand]", country: "New Zealand", url: "https://topembed.pw/channel/SkySport1[NewZealand]" },
+            { name: "OptusSport1[Australia]", country: "Australia", url: "https://topembed.pw/channel/OptusSport1[Australia]" }
+        ];
+
+        // DOM elements
+        const channelsList = document.getElementById('channelsList');
+        const channelsCount = document.getElementById('channelsCount');
+        const streamIframe = document.getElementById('streamIframe');
+        const playerPlaceholder = document.querySelector('.player-placeholder');
+        const searchBox = document.querySelector('.search-box');
+        const searchBtn = document.querySelector('.search-btn');
+
+        // Populate channels list
+        function populateChannelsList(channelsArray) {
+            channelsList.innerHTML = '';
+            channelsCount.textContent = `${channelsArray.length} CHANNELS`;
+            
+            channelsArray.forEach(channel => {
+                const channelItem = document.createElement('div');
+                channelItem.className = 'channel-item';
+                channelItem.innerHTML = `
+                    <div class="channel-name">${channel.name}</div>
+                    <div class="channel-country">${channel.country}</div>
+                `;
+                channelItem.addEventListener('click', () => selectChannel(channel, channelItem));
+                channelsList.appendChild(channelItem);
+            });
+        }
+
+        // Select channel and load stream
+        function selectChannel(channel, element) {
+            // Remove active class from all channels
+            document.querySelectorAll('.channel-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Add active class to selected channel
+            element.classList.add('active');
+            
+            // Hide placeholder and show iframe
+            playerPlaceholder.style.display = 'none';
+            streamIframe.style.display = 'block';
+            
+            // Load the stream
+            streamIframe.src = channel.url;
+        }
+
+        // Search functionality
+        function performSearch() {
+            const searchTerm = searchBox.value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                populateChannelsList(channels);
+                return;
+            }
+            
+            const filteredChannels = channels.filter(channel => 
+                channel.name.toLowerCase().includes(searchTerm) || 
+                channel.country.toLowerCase().includes(searchTerm)
+            );
+            
+            populateChannelsList(filteredChannels);
+        }
+
+        // Event listeners
+        searchBtn.addEventListener('click', performSearch);
+        searchBox.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // Initialize the page
+        populateChannelsList(channels);
+    </script>
+</body>
+</html>
